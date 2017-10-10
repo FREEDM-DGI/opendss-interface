@@ -16,13 +16,13 @@ def Main():
         mySocket.connect((host,port))
 	#mySocket.setblocking(0)
 	#open csv  and send table to server######################################################################
-       	with open('openDSS.CSV', 'rb') as csvfile:
+       	with open('C:\Program Files\OpenDSS\HILTestBed\HIL7Nodes_EXP_VOLTAGES.CSV', 'rb') as csvfile:
 		opendssCsv = csv.reader(csvfile, delimiter=' ')
 		data = list(opendssCsv)
    		row_count = len(data)
 	print(row_count)
 	csvData = str(row_count)
-	with open('openDSS.CSV', 'rb') as csvfile:
+	with open('C:\Program Files\OpenDSS\HILTestBed\HIL7Nodes_EXP_VOLTAGES.CSV', 'rb') as csvfile:
 		opendssCsv = csv.reader(csvfile, delimiter=' ')
 		for row in opendssCsv:
 			message = ''.join(row)

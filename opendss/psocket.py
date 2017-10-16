@@ -38,21 +38,19 @@ def Main():
 			text_file = open("Output.txt", "w")
 			text_file.write(data)
 			text_file.close()
-		#update(data)
+		#update dllss and Dss
+		#updateHIL7NodeSystem(data)
+		#updateOpenDSSEngine(data)
 		#check for csv file update and resend
 	mySocket.close()
-	
-	#call c++ code if required #############################################################################
-	#p = subprocess.Popen([r"/usr/bin/g++", "-Wall", "-o", "test", 'test.cpp'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	#p.communicate()
-	#p = subprocess.Popen(["test.exe"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	#p.communicate()
-	#result = p.stdout.readline().strip()
-    	#print(result)
-
-	#load openDSS com server ###############################################################################
-	
-def update(str):
+			
+#function to update HIL7NodeSystem DSS	
+def updateHIL7NodeSystem(str):
+	with open('C:\Program Files\OpenDSS\HILTestBed\HIL7NodesSystem.dss', 'a') as file:
+		file.write(str)
+		
+#function to update OpenDSSEngine		
+def updateOpenDSSEngine(str):
 	dssObj = win32com.client.Dispatch("OpenDSSEngine.DSS")
        	print('loaded....')
 	dssCircuit = dssObj.ActiveCircuit
@@ -63,6 +61,7 @@ def update(str):
 	#oldkvar = dssCircuit.Loads.kvar
 	dssCircuit.Loads.kvar = float(str.split(',')[2].split(':')[1])
 	print('updated....')
+	
 def test():
 	Main()
 	

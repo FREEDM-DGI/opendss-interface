@@ -1,8 +1,5 @@
 import socket
 import csv
-import subprocess
-from subprocess import Popen, PIPE
-
 import os
 #from win32com.client import Dispatch
 

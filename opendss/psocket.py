@@ -1,25 +1,27 @@
 import socket
 import csv
 import os
+import sys
 #from win32com.client import Dispatch
 
 def Main():
 	#connect################################################################################################
-
-        host = '127.0.0.1'
+	# host = '127.0.0.1'
+	host = sys.argv[1]
         port = 1887
+	# port = int(sys.argv[2])
         mySocket = socket.socket()
 	#mySocket.settimeout(8)	#set timer change if need be...
         mySocket.connect((host,port))
 	#mySocket.setblocking(0)
 	#open csv  and send table to server######################################################################
-       	with open('C:\Program Files\OpenDSS\HILTestBed\HIL7Nodes_EXP_VOLTAGES.CSV', 'rb') as csvfile:
+       	with open('C:\Program Files\OpenDSS\HILTestBed\HIL7Nodes_EXP_VOLTAGES.CSV', 'rb') as csvfile:	# replace file path as necessary
 		opendssCsv = csv.reader(csvfile, delimiter=' ')
 		data = list(opendssCsv)
    		row_count = len(data)
 	print(row_count)
 	csvData = str(row_count)
-	with open('C:\Program Files\OpenDSS\HILTestBed\HIL7Nodes_EXP_VOLTAGES.CSV', 'rb') as csvfile:
+	with open('C:\Program Files\OpenDSS\HILTestBed\HIL7Nodes_EXP_VOLTAGES.CSV', 'rb') as csvfile:	# replace file path as necessary
 		opendssCsv = csv.reader(csvfile, delimiter=' ')
 		for row in opendssCsv:
 			message = ''.join(row)

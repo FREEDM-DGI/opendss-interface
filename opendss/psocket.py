@@ -6,9 +6,9 @@ import sys
 
 def Main():
 	#connect################################################################################################
-	# host = '127.0.0.1'
-	host = sys.argv[1]
-        port = 1887
+	# host = '127.0.0.1'	# hard corded host address
+	host = sys.argv[1]	# user inputed host address
+        port = 1887	# if port is changed, then it should be changed in device server adapter too.
 	# port = int(sys.argv[2])
         mySocket = socket.socket()
 	#mySocket.settimeout(8)	#set timer change if need be...

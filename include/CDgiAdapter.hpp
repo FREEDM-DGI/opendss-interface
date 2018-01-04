@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @file         CDgiAdapter.hpp
 ///
-/// @author       Thomas Roth <tprfh7@mst.edu>
+/// @author       Thomas Roth <tprfh7@mst.edu>, Manish Jaisinghani <mjkhf@mst.edu>
 ///
 /// @project      FREEDM DGI
 ///
-/// @description  Adapter for the PSCAD power simulation
+/// @description  Adapter for the DGI interfacing.
 ///
 /// These source code files were created at Missouri University of Science and
 /// Technology, and are intended for use in teaching or research. They may be
@@ -18,7 +18,7 @@
 /// Suggested modifications or questions about these files can be directed to
 /// Dr. Bruce McMillin, Department of Computer Science, Missouri University of
 /// Science and Technology, Rolla, MO 65409 <ff@mst.edu>.
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 #ifndef C_ADAPTER_DGI_HPP
 #define C_ADAPTER_DGI_HPP
@@ -32,33 +32,26 @@ namespace freedm {
     namespace simulation {
         namespace adapter {
 
-/// power simulation adapter that handles packets with simple headers
-///////////////////////////////////////////////////////////////////////////////
-/// The simulation adapter expects a packet with a simple string header and a
-/// byte stream payload.  A SET header will cause the adapter to update the
-/// state table using the packet payload.  A GET header will be responded to
-/// with the content of the command table.  A RST header will update both the
-/// state table and the command table using the packet payload.  If a header
-/// is not recognized, the payload will be discarded.
-///
-/// @limitations If the payload does not contain the expected amount of bytes,
-/// the adapter will be blocked until the client sends more data or closes the
-/// connection.  The bytes expected is derived from the XML specification.
-///////////////////////////////////////////////////////////////////////////////
+/// DGI interface adapter that handles messages from the DGI to the device server
+/////////////////////////////////////////////////////////////////////////////////
+/// The DGI adapter sends opendss updates to the DGI and receives commands from
+/// from the DGI.
+/// @limitations: subject to improvement.
+/////////////////////////////////////////////////////////////////////////////////
             class CDgiAdapter
                     : public IServer
                             , public CAdapter
             {
             public:
-                /// constructs a simulation adapter instance
+                /// constructs a dgi adapter instance
                 CDgiAdapter( unsigned short port,
                                     const boost::property_tree::ptree & tree );
             private:
                 /// handles the accepted socket connection
                 virtual void HandleConnection();
-                /// updates the state table with data read from the socket
+                /// sends commands to opendss application
                 void SendCommands(std::string command);
-                /// writes the command table data to the socket
+                /// gets commands from dgi
                 void GetExternalCommand();
             public:
                 /// buffer size in bytes of the simulation packet

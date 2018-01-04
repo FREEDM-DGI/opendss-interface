@@ -1,11 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 /// @file         COpendssAdapter.hpp
 ///
-/// @author       Thomas Roth <tprfh7@mst.edu>
+/// @author       Thomas Roth <tprfh7@mst.edu>, Manish Jaisinghani <mjkhf@mst.edu>
 ///
 /// @project      FREEDM DGI
 ///
-/// @description  Adapter for the PSCAD power simulation
+/// @description  Adapter for the Opendss power simulation
 ///
 /// These source code files were created at Missouri University of Science and
 /// Technology, and are intended for use in teaching or research. They may be
@@ -18,7 +18,7 @@
 /// Suggested modifications or questions about these files can be directed to
 /// Dr. Bruce McMillin, Department of Computer Science, Missouri University of
 /// Science and Technology, Rolla, MO 65409 <ff@mst.edu>.
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 #ifndef C_ADAPTER_OPENDSS_HPP
 #define C_ADAPTER_OPENDSS_HPP
@@ -32,18 +32,11 @@ namespace freedm {
     namespace simulation {
         namespace adapter {
 
-/// power simulation adapter that handles packets with simple headers
+/// Opendss adapter used for interfacing device server with opendss application
 ///////////////////////////////////////////////////////////////////////////////
-/// The simulation adapter expects a packet with a simple string header and a
-/// byte stream payload.  A SET header will cause the adapter to update the
-/// state table using the packet payload.  A GET header will be responded to
-/// with the content of the command table.  A RST header will update both the
-/// state table and the command table using the packet payload.  If a header
-/// is not recognized, the payload will be discarded.
-/// 
-/// @limitations If the payload does not contain the expected amount of bytes,
-/// the adapter will be blocked until the client sends more data or closes the
-/// connection.  The bytes expected is derived from the XML specification.
+/// The adapter expects a string of csv data from the opendss application. 
+/// The adapter returns DGI commands to the opendss application if any.
+/// @limitations subject to improvement.
 ///////////////////////////////////////////////////////////////////////////////
             class COpendssAdapter
                     : public IServer

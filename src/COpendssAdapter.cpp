@@ -1,11 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 /// @file         COpendssAdapter.cpp
 ///
-/// @author       Thomas Roth <tprfh7@mst.edu>
+/// @author       Thomas Roth <tprfh7@mst.edu>, Manish Jaisinghani <mjkhf@mst.edu>
 ///
 /// @project      FREEDM DGI
 ///
-/// @description  Adapter for the PSCAD power simulation
+/// @description  Adapter for Opendss power simulation.
 ///
 /// These source code files were created at Missouri University of Science and
 /// Technology, and are intended for use in teaching or research. They may be
@@ -61,7 +61,7 @@ COpendssAdapter::COpendssAdapter( unsigned short port,
 /// @Peers Communicates through socket connection to the IServer client.
 /// @ErrorHandling If socket connection is refused or lost before any data is
 /// received, error is thrown.
-/// @limitations None.
+/// @limitations subject to improvement
 ///////////////////////////////////////////////////////////////////////////////
 void COpendssAdapter::HandleConnection()
 {
@@ -74,17 +74,14 @@ void COpendssAdapter::HandleConnection()
     }
 
     Logger.Status<<"Received data from opendss socket!"<<std::endl;
-    Logger.Status<<"Opendss data :"<<buffer<<std::endl;
-
     opendssData = buffer;
     Logger.Status<<"Opendss data stored :"<<opendssData<<std::endl;
     //wait for dgi command
-    //while(CDgiAdapter::GetData().size<0){
-     //   sleep(80);
-
-    //}
-    //commands = "";
-    SendCommands("Bus : 1,Node1 : 2,Magnitude1 : 8088.8,Angle1 : 88.8, pu1 : 1.088"); //SendCommands(CDgiAdapter::GetData())
+    while(CDgiAdapter::GetData().size<0){
+       sleep(80);
+    }
+    //SendCommands("Bus : 1,Node1 : 2,Magnitude1 : 8088.8,Angle1 : 88.8, pu1 : 1.088"); 
+    SendCommands(CDgiAdapter::GetData())
 
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,7 +101,7 @@ void COpendssAdapter::SendCommands(std::string command)
     if(!command.empty()){
         bzero(buffer,BUFFER_SIZE-1);
         strcpy(buffer,command.c_str());
-        if(!(write(sd,buffer,command.size()))){ //ceasar message format not encoded!!
+        if(!(write(sd,buffer,command.size()))){
             Logger.Error<<"Socket write failed!!!";
         }
     }

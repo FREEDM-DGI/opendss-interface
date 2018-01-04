@@ -1,11 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 /// @file         CDgiAdapter.cpp
 ///
-/// @author       Thomas Roth <tprfh7@mst.edu>
+/// @author       Thomas Roth <tprfh7@mst.edu>, Manish Jaisinghani <mjkhf@mst.edu>
 ///
 /// @project      FREEDM DGI
 ///
-/// @description  Adapter for the PSCAD power simulation
+/// @description  Adapter for DGI interfacing with device server.
 ///
 /// These source code files were created at Missouri University of Science and
 /// Technology, and are intended for use in teaching or research. They may be
@@ -24,13 +24,10 @@
 #include "CTableManager.hpp"
 #include "COpendssAdapter.hpp"
 #include "DeviceTable.hpp"
-
 #include <vector>
 #include <cstring>
 #include <cstddef>
-
 #include <boost/asio.hpp>
-#include <COpendssAdapter.hpp>
 
 namespace freedm {
     namespace simulation {
@@ -48,7 +45,7 @@ namespace freedm {
 /// @post Initializes the IServer and CAdapter base classes.
 /// @param port The port number to use for the server.
 /// @param tree The property tree specification of the adapter.
-/// @limitations None.
+/// @limitations subject to improvement
 ///////////////////////////////////////////////////////////////////////////////
             CDgiAdapter::CDgiAdapter( unsigned short port,
                                                     const boost::property_tree::ptree & tree )

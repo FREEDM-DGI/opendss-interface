@@ -21,6 +21,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "COpendssAdapter.hpp"
+#include "CDgiAdapter.hpp"
 #include "CTableManager.hpp"
 #include "DeviceTable.hpp"
 
@@ -77,11 +78,11 @@ void COpendssAdapter::HandleConnection()
     opendssData = buffer;
     Logger.Status<<"Opendss data stored :"<<opendssData<<std::endl;
     //wait for dgi command
-    while(CDgiAdapter::GetData().size<0){
+    while(CDgiAdapter::GetData().size()<0){
        sleep(80);
     }
     //SendCommands("Bus : 1,Node1 : 2,Magnitude1 : 8088.8,Angle1 : 88.8, pu1 : 1.088"); 
-    SendCommands(CDgiAdapter::GetData())
+    SendCommands(CDgiAdapter::GetData());
 
 }
 ///////////////////////////////////////////////////////////////////////////////

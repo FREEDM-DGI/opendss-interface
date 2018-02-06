@@ -2,7 +2,7 @@ import socket
 import csv
 import os
 import sys
-#from win32com.client import Dispatch
+import win32com.client
 
 def Main():
 	#connect################################################################################################
@@ -59,6 +59,7 @@ def updateOpenDSSEngine(str):
 	#dssCircuit.Loads.Name = loadName.split('.')[1]
 	#oldkvar = dssCircuit.Loads.kvar
 	dssCircuit.Loads.kvar = float(str.split(',')[2].split(':')[1])
+	dssObj.Text.command = "compile 'Path_to_OpenDSS_script_file_name'"
 	print('updated....')
 	
 def test():

@@ -1,0 +1,103 @@
+Clear 
+
+!
+! This script is based on a 7 node HIL system provided by FSU CAPS
+! Yue Shi, 2016
+!
+
+new circuit.HIL7Nodes
+~ basekv=69 pu=1.015 phases=3 bus1=SourceBus  
+~ Angle=30                                                         ! advance angle 30 deg so result agree with published angle
+~ MVAsc3=20000 MVASC1=21000    ! stiffen the source to approximate inf source
+
+
+
+!SUB TRANSFORMER DEFINITION 
+! Although this data was given, it does not appear to be used in the test case results
+! The published test case starts at 1.0 per unit at Bus 650. To make this happen, we will change the impedance
+! on the transformer to something tiny by dividing by 1000 using the DSS in-line RPN math
+New Transformer.Sub Phases=3 Windings=2   XHL=(8 1000 /)
+~ wdg=1 bus=SourceBus   conn=delta  kv=69  kva=2500   %r=(.5 1000 /)  XHT=4
+~ wdg=2 bus=650             conn=wye    kv=12.47  kva=2500   %r=(.5 1000 /)   XLT=4
+
+
+
+!LINE CODES
+
+// these are local matrix line codes
+// these values maybe not realistic, but the length*ohm/mi matches the 7 node HIL model 
+New linecode.mtx601 nphases=3 BaseFreq=60 
+~ rmatrix = (4.1323 | 1.6529 4.1323 | 1.6529 1.6529 4.1323 ) 
+~ xmatrix = (11.9301 | 4.7720 11.9301 | 4.7720 4.7720 11.9301 ) 
+~ units=mi 
+
+
+
+
+
+
+
+!LOAD DEFINITIONS 
+
+New Load.632a Bus1=632.1     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=80   kvar=0 !SST1 Phase A
+New Load.632b Bus1=632.2     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=80   kvar=0 !SST1 Phase B
+New Load.632c Bus1=632.3     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=80   kvar=0 !SST1 Phase C
+
+New Load.670a Bus1=670.1     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=70   kvar=0 !SST2 Phase A
+New Load.670b Bus1=670.2     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=70   kvar=0 !SST2 Phase B
+New Load.670c Bus1=670.3     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=70   kvar=0 !SST2 Phase C
+
+New Load.671a Bus1=671.1     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=60   kvar=0 !SST3 Phase A
+New Load.671b Bus1=671.2     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=60   kvar=0 !SST3 Phase B
+New Load.671c Bus1=671.3     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=60   kvar=0 !SST3 Phase C
+
+New Load.680a Bus1=680.1     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=50   kvar=0 !SST4 Phase A
+New Load.680b Bus1=680.2     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=50   kvar=0 !SST4 Phase B
+New Load.680c Bus1=680.3     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=50   kvar=0 !SST4 Phase C
+
+New Load.633a Bus1=633.1     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=90   kvar=0 !SST7 Phase A
+New Load.633b Bus1=633.2     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=90   kvar=0 !SST7 Phase B
+New Load.633c Bus1=633.3     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=90   kvar=0 !SST7 Phase C
+
+New Load.634a Bus1=634.1     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=50   kvar=0 !SST6 Phase A
+New Load.634b Bus1=634.2     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=50   kvar=0 !SST6 Phase B
+New Load.634c Bus1=634.3     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=50   kvar=0 !SST6 Phase C
+
+New Load.635a Bus1=635.1     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=70   kvar=0 !SST5 Phase A
+New Load.635b Bus1=635.2     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=70   kvar=0 !SST5 Phase B
+New Load.635c Bus1=635.3     Phases=1 Conn=Wye  Model=1 kV=7.2  kW=70   kvar=0 !SST5 Phase C
+
+
+
+!CAPACITOR DEFINITIONS
+//New Capacitor.Cap1 Bus1=675 phases=3 kVAR=600 kV=7.2 
+
+
+
+!LINE DEFINITIONS 
+New Line.650632    Phases=3 Bus1=650.1.2.3    Bus2=632.1.2.3  LineCode=mtx601 Length=5280 units=ft 
+New Line.632670    Phases=3 Bus1=632.1.2.3    Bus2=670.1.2.3  LineCode=mtx601 Length=5280 units=ft    
+New Line.670671    Phases=3 Bus1=670.1.2.3    Bus2=671.1.2.3  LineCode=mtx601 Length=5280 units=ft 
+New Line.671680    Phases=3 Bus1=671.1.2.3    Bus2=680.1.2.3  LineCode=mtx601 Length=5280 units=ft 
+New Line.650633    Phases=3 Bus1=650.1.2.3    Bus2=633.1.2.3  LineCode=mtx601 Length=5280 units=ft 
+New Line.633634    Phases=3 Bus1=633.1.2.3    Bus2=634.1.2.3  LineCode=mtx601 Length=5280 units=ft 
+New Line.634635    Phases=3 Bus1=634.1.2.3    Bus2=635.1.2.3  LineCode=mtx601 Length=5280 units=ft 
+
+
+
+
+Set Voltagebases=[69, 12.47, .48]
+calcv
+Solve
+
+!---------------------------------------------------------------------------------------------------------------------------------------------------
+!----------------Show some Results -----------------------------------------------------------------------------------------------------------------
+!---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+ Show Voltages LN Nodes
+// Show Currents Elem
+// Show Powers kVA Elem
+// Show Losses
+// Show Taps
+

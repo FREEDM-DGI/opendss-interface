@@ -56,6 +56,8 @@ namespace freedm {
             }
 
             std::string CDgiAdapter::commands ="";
+            unsigned int CDgiAdapter::sd = -1,CDgiAdapter::n = -1;
+            char CDgiAdapter::buffer[CDgiAdapter::BUFFER_SIZE] = "";
 ///////////////////////////////////////////////////////////////////////////////
 /// Handles connection to openDSS application python socket.
 /// @Peers Communicates through socket connection to the IServer client.
@@ -69,26 +71,27 @@ namespace freedm {
 
                 sd = m_socket.native();
                 bzero(buffer,BUFFER_SIZE-1);
-                Logger.Status<<"DGI is connected!!!"<<std::endl;
+                Logger.Status<<"DGI is connected"<<std::endl;
 
-                if(COpendssAdapter::GetData().size()>0){
-                    strcpy(buffer,COpendssAdapter::GetData().c_str());
+               if(COpendssAdapter::GetData().size()>0) {
+                   strcpy(buffer, COpendssAdapter::GetData().c_str());
                     if(!(write(sd,buffer,BUFFER_SIZE-1))){
                         Logger.Error<<"Socket write failed!!!";
                     }
-                    Logger.Status<<"Data sent to DGI"<<buffer<<std::endl;
-                }
+                    Logger.Status<<"Data sent to DGI: "<< buffer<<std::endl;
+               }
+
                 bzero(buffer,BUFFER_SIZE-1);
                 if(!(read(sd,buffer,BUFFER_SIZE-1))){
                     Logger.Error<<"Socket read failed!!!";
                 }
-                Logger.Status<<"Received data from dgi socket!"<<std::endl;
-                Logger.Status<<"dgi data :"<<buffer<<std::endl;
 
+                Logger.Status<<"dgi data: "<< buffer<<std::endl;
                 commands =   buffer;
-                Logger.Status<<"Opendss data stored :"<<commands<<std::endl;
+                Logger.Status<<"Opendss data stored: "<<commands<<std::endl;
             }
- ///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
 /// gets DGI commands
 /// @limitations None.
 ///////////////////////////////////////////////////////////////////////////////
@@ -100,12 +103,13 @@ namespace freedm {
 /// @pre The client must send the amount of data held in commands.
 /// @limitations None.
 ///////////////////////////////////////////////////////////////////////////////
+
             void CDgiAdapter::SendCommands(std::string command)
             {
                 if(!command.empty()){
                     bzero(buffer,BUFFER_SIZE);
                     strcpy(buffer,command.c_str());
-                    if(!(write(sd,buffer,BUFFER_SIZE-1))){ //ceasar message format not encoded!!
+                    if(!(write(sd,buffer,BUFFER_SIZE-1))){
                         Logger.Error<<"Socket write failed!!!";
                     }
                 }

@@ -49,21 +49,22 @@ namespace freedm {
             private:
                 /// handles the accepted socket connection
                 virtual void HandleConnection();
-                /// updates the state table with data read from the socket
-                void SendCommands(std::string command);
+
                 /// writes the command table data to the socket
                 void GetExternalCommand();
             public:
                 /// buffer size in bytes of the simulation packet
                 static const unsigned int BUFFER_SIZE = 1024;
                 /// socket desciptor and int n for error handling
-                unsigned int sd,n;
+                static unsigned int sd,n;
                 //carries data received or data to be sent
-                char buffer[BUFFER_SIZE];
+                static char buffer[BUFFER_SIZE];
                 /// shared opendss data variable
                 static std::string opendssData;
                 //gets saved opendss data
                 static std::string GetData();
+                /// updates the state table with data read from the socket
+                static void SendCommands(std::string command);
             };
 
         } // namespace adapter

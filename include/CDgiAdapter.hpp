@@ -46,20 +46,19 @@ namespace freedm {
                 /// constructs a dgi adapter instance
                 CDgiAdapter( unsigned short port,
                                     const boost::property_tree::ptree & tree );
-            private:
                 /// handles the accepted socket connection
                 virtual void HandleConnection();
                 /// sends commands to opendss application
-                void SendCommands(std::string command);
+                static void SendCommands(std::string command);
                 /// gets commands from dgi
                 void GetExternalCommand();
             public:
                 /// buffer size in bytes of the simulation packet
                 static const unsigned int BUFFER_SIZE = 1024;
                 /// socket desciptor and int n for error handling
-                unsigned int sd,n;
+                static unsigned int sd,n;
                 //carries data received or data to be sent
-                char buffer[BUFFER_SIZE];
+                static char buffer[BUFFER_SIZE];
                 /// shared opendss data variable
                 static std::string commands;
                 //gets saved commands

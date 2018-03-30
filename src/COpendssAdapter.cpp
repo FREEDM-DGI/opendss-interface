@@ -57,6 +57,8 @@ COpendssAdapter::COpendssAdapter( unsigned short port,
     Logger.Trace << __PRETTY_FUNCTION__ << std::endl;
 }
     std::string COpendssAdapter::opendssData = "";
+    unsigned int COpendssAdapter::sd = -1,COpendssAdapter::n = -1;
+    char COpendssAdapter::buffer[COpendssAdapter::BUFFER_SIZE] = "";
 ///////////////////////////////////////////////////////////////////////////////
 /// Handles connection to openDSS application python socket.
 /// @Peers Communicates through socket connection to the IServer client.
@@ -66,8 +68,8 @@ COpendssAdapter::COpendssAdapter( unsigned short port,
 ///////////////////////////////////////////////////////////////////////////////
 void COpendssAdapter::HandleConnection()
 {
-    Logger.Trace << __PRETTY_FUNCTION__ << std::endl;
 
+    Logger.Status<<"OpenDSS Application Connected"<<std::endl;
     sd = m_socket.native();
     bzero(buffer,BUFFER_SIZE);
     if(!(read(sd,buffer,BUFFER_SIZE-1))){
@@ -76,14 +78,13 @@ void COpendssAdapter::HandleConnection()
 
     Logger.Status<<"Received data from opendss socket!"<<std::endl;
     opendssData = buffer;
-    Logger.Status<<"Opendss data stored :"<<opendssData<<std::endl;
+    Logger.Status<<"Opendss data stored: "<<opendssData<<std::endl;
     //wait for dgi command
     while(CDgiAdapter::GetData().size()<0){
-       sleep(80);
+       sleep(8);
+        CDgiAdapter::SendCommands(opendssData);
     }
-    //SendCommands("Bus : 1,Node1 : 2,Magnitude1 : 8088.8,Angle1 : 88.8, pu1 : 1.088"); 
     SendCommands(CDgiAdapter::GetData());
-
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// gets openDss data
@@ -105,6 +106,7 @@ void COpendssAdapter::SendCommands(std::string command)
         if(!(write(sd,buffer,command.size()))){
             Logger.Error<<"Socket write failed!!!";
         }
+        Logger.Status<<"Opendss commands sent: "<< buffer<<std::endl;
     }
 }
 

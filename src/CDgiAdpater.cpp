@@ -56,7 +56,7 @@ namespace freedm {
             }
 
             std::string CDgiAdapter::commands ="";
-            unsigned int CDgiAdapter::sd = -1,CDgiAdapter::n = -1;
+            unsigned int CDgiAdapter::sd = -2,CDgiAdapter::n = -1;
             char CDgiAdapter::buffer[CDgiAdapter::BUFFER_SIZE] = "";
 ///////////////////////////////////////////////////////////////////////////////
 /// Handles connection to openDSS application python socket.
@@ -74,11 +74,7 @@ namespace freedm {
                 Logger.Status<<"DGI is connected"<<std::endl;
 
                if(COpendssAdapter::GetData().size()>0) {
-                   strcpy(buffer, COpendssAdapter::GetData().c_str());
-                    if(!(write(sd,buffer,BUFFER_SIZE-1))){
-                        Logger.Error<<"Socket write failed!!!";
-                    }
-                    Logger.Status<<"Data sent to DGI: "<< buffer<<std::endl;
+                   SendCommands(COpendssAdapter::GetData(),sd);
                }
 
                 bzero(buffer,BUFFER_SIZE-1);
@@ -86,10 +82,10 @@ namespace freedm {
                     Logger.Error<<"Socket read failed!!!";
                 }
 
-                Logger.Status<<"dgi commands: "<< buffer<<std::endl;
+                Logger.Status<<"dgi data: "<< buffer<<std::endl;
                 commands =   buffer;
-                Logger.Status<<"Opendss commands stored: "<<commands<<std::endl;
-                
+                Logger.Status<<"Opendss data stored: "<<commands<<std::endl;
+
             }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,13 +95,20 @@ namespace freedm {
             std::string CDgiAdapter::GetData(){
                 return commands;
             }
+ ///////////////////////////////////////////////////////////////////////////////
+/// deletes DGI commands
+/// @limitations None.
+///////////////////////////////////////////////////////////////////////////////
+            void CDgiAdapter::clearData() {
+                commands = "";
+            }
 ///////////////////////////////////////////////////////////////////////////////
 /// writes commands from DGI to opendss socket
 /// @pre The client must send the amount of data held in commands.
 /// @limitations None.
 ///////////////////////////////////////////////////////////////////////////////
 
-            void CDgiAdapter::SendCommands(std::string command, unsigned int sd)
+            void CDgiAdapter::SendCommands(std::string command,unsigned int sd)
             {
                 if(!command.empty()){
                     bzero(buffer,BUFFER_SIZE);
@@ -113,6 +116,9 @@ namespace freedm {
                     if(!(write(sd,buffer,BUFFER_SIZE-1))){
                         Logger.Error<<"Socket write failed!!!";
                     }
+                    Logger.Status<<"Opendss data sent to dgi: "<< buffer<<std::endl;
+                    if(command != "waiting")
+                        COpendssAdapter::clearData();
                 }
             }
 ///////////////////////////////////////////////////////////////////////////////

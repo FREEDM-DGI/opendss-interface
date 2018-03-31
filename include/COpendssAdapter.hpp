@@ -63,6 +63,8 @@ namespace freedm {
                 static std::string opendssData;
                 //gets saved opendss data
                 static std::string GetData();
+                //deletes data
+                static void clearData();
                 /// updates the state table with data read from the socket
                 static void SendCommands(std::string command, unsigned int sd);
             };

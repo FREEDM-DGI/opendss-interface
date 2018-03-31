@@ -82,9 +82,9 @@ void COpendssAdapter::HandleConnection()
     //wait for dgi command
     while(CDgiAdapter::GetData().size()<0){
        sleep(8);
-        CDgiAdapter::SendCommands(opendssData);
+       SendCommands('waiting',sd);
     }
-    SendCommands(CDgiAdapter::GetData());
+    SendCommands(CDgiAdapter::GetData(),sd);
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// gets openDss data
@@ -98,7 +98,7 @@ std::string COpendssAdapter::GetData(){
 /// @pre The client must send the amount of data held in commands.
 /// @limitations None.
 ///////////////////////////////////////////////////////////////////////////////
-void COpendssAdapter::SendCommands(std::string command)
+void COpendssAdapter::SendCommands(std::string command,unsigned int sd)
 {
     if(!command.empty()){
         bzero(buffer,BUFFER_SIZE-1);

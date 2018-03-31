@@ -64,7 +64,7 @@ namespace freedm {
                 //gets saved opendss data
                 static std::string GetData();
                 /// updates the state table with data read from the socket
-                static void SendCommands(std::string command);
+                static void SendCommands(std::string command, unsigned int sd);
             };
 
         } // namespace adapter

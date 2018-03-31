@@ -86,9 +86,15 @@ namespace freedm {
                     Logger.Error<<"Socket read failed!!!";
                 }
 
-                Logger.Status<<"dgi data: "<< buffer<<std::endl;
+                Logger.Status<<"dgi commands: "<< buffer<<std::endl;
                 commands =   buffer;
-                Logger.Status<<"Opendss data stored: "<<commands<<std::endl;
+                Logger.Status<<"Opendss commands stored: "<<commands<<std::endl;
+                
+                while(COpendssAdapter::GetData().size()==0){
+                    sleep(8);
+                    SendCommands('waiting',sd);
+                }
+                SendCommands(COpendssAdapter::GetData(),sd);
             }
 
 ///////////////////////////////////////////////////////////////////////////////

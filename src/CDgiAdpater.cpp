@@ -104,7 +104,7 @@ namespace freedm {
 /// @limitations None.
 ///////////////////////////////////////////////////////////////////////////////
 
-            void CDgiAdapter::SendCommands(std::string command)
+            void CDgiAdapter::SendCommands(std::string command, unsigned int sd)
             {
                 if(!command.empty()){
                     bzero(buffer,BUFFER_SIZE);

@@ -56,9 +56,7 @@ COpendssAdapter::COpendssAdapter( unsigned short port,
 {
     Logger.Trace << __PRETTY_FUNCTION__ << std::endl;
 }
-    std::string COpendssAdapter::opendssData = "";
-    unsigned int COpendssAdapter::sd = -1,COpendssAdapter::n = -1;
-    char COpendssAdapter::buffer[COpendssAdapter::BUFFER_SIZE] = "";
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Handles connection to openDSS application python socket.
 /// @Peers Communicates through socket connection to the IServer client.
@@ -66,6 +64,9 @@ COpendssAdapter::COpendssAdapter( unsigned short port,
 /// received, error is thrown.
 /// @limitations subject to improvement
 ///////////////////////////////////////////////////////////////////////////////
+    std::string COpendssAdapter::opendssData = "";
+    unsigned int COpendssAdapter::sd = -1,COpendssAdapter::n = -1;
+    char COpendssAdapter::buffer[COpendssAdapter::BUFFER_SIZE] = "";
 void COpendssAdapter::HandleConnection()
 {
 
@@ -79,10 +80,11 @@ void COpendssAdapter::HandleConnection()
     Logger.Status<<"Received data from opendss socket!"<<std::endl;
     opendssData = buffer;
     Logger.Status<<"Opendss data stored: "<<opendssData<<std::endl;
+
     //wait for dgi command
     while(CDgiAdapter::GetData().size()==0){
        sleep(8);
-       SendCommands('waiting',sd);
+        SendCommands("waiting",sd);
     }
     SendCommands(CDgiAdapter::GetData(),sd);
 }
@@ -93,6 +95,13 @@ void COpendssAdapter::HandleConnection()
 std::string COpendssAdapter::GetData(){
     return opendssData;
 }
+    ///////////////////////////////////////////////////////////////////////////////
+/// deletes DGI commands
+/// @limitations None.
+///////////////////////////////////////////////////////////////////////////////
+ void COpendssAdapter::clearData() {
+        opendssData = "";
+ }
 ///////////////////////////////////////////////////////////////////////////////
 /// writes commands from DGI to opendss socket
 /// @pre The client must send the amount of data held in commands.
@@ -107,6 +116,8 @@ void COpendssAdapter::SendCommands(std::string command,unsigned int sd)
             Logger.Error<<"Socket write failed!!!";
         }
         Logger.Status<<"Opendss commands sent: "<< buffer<<std::endl;
+        if(command != "waiting")
+            CDgiAdapter::clearData();
     }
 }
 

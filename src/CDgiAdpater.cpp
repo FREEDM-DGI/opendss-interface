@@ -90,11 +90,6 @@ namespace freedm {
                 commands =   buffer;
                 Logger.Status<<"Opendss commands stored: "<<commands<<std::endl;
                 
-                while(COpendssAdapter::GetData().size()==0){
-                    sleep(8);
-                    SendCommands('waiting',sd);
-                }
-                SendCommands(COpendssAdapter::GetData(),sd);
             }
 
 ///////////////////////////////////////////////////////////////////////////////

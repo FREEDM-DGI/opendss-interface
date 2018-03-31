@@ -49,7 +49,7 @@ namespace freedm {
                 /// handles the accepted socket connection
                 virtual void HandleConnection();
                 /// sends commands to opendss application
-                static void SendCommands(std::string command);
+                static void SendCommands(std::string command, unsigned int sd);
                 /// gets commands from dgi
                 void GetExternalCommand();
             public:

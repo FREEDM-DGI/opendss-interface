@@ -80,7 +80,7 @@ void COpendssAdapter::HandleConnection()
     opendssData = buffer;
     Logger.Status<<"Opendss data stored: "<<opendssData<<std::endl;
     //wait for dgi command
-    while(CDgiAdapter::GetData().size()<0){
+    while(CDgiAdapter::GetData().size()==0){
        sleep(8);
        SendCommands('waiting',sd);
     }
